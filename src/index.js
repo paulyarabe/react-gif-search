@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import GifList from './components/GifList';
+import GifModal from './components/GifModal';
 import SearchBar from './components/SearchBar';
 import request from 'superagent';
 import './styles/app.css'
@@ -10,8 +11,24 @@ class App extends React.Component {
     super();
 
     this.state = {
-      gifs: []
+      gifs: [],
+      selectedGif: null,
+      modalIsOpen: false
     }
+  }
+
+  openModal(gif) {
+    this.setState({
+      modalIsOpen: true,
+      selectedGif: gif
+    })
+  }
+
+  closeModal() {
+    this.setState({
+      modalIsOpen: false,
+      selectedGif: null
+    })
   }
 
   handleTermChange = (term) => {
@@ -19,7 +36,6 @@ class App extends React.Component {
 
     request.get(url, (err, res) => {
       this.setState({ gifs: res.body.data});
-      console.log(res.body.data)
     })
   }
 
@@ -27,7 +43,11 @@ class App extends React.Component {
     return (
       <div>
         <SearchBar onTermChange={this.handleTermChange} />
-        <GifList gifs={this.state.gifs} />
+        <GifList  gifs={this.state.gifs}
+                  onGifSelect={selectedGif => this.openModal(selectedGif) } />
+        <GifModal modalIsOpen={this.state.modalIsOpen}
+                  selectedGif={this.state.selectedGif}
+                  onRequestClose={ () => this.closeModal() } />
     </div>
     )
   }
