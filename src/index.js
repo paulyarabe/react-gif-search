@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import GifList from './components/GifList';
 import SearchBar from './components/SearchBar';
-import request from 'superagent'
+import request from 'superagent';
+import './styles/app.css'
 
 class App extends React.Component {
   constructor() {
